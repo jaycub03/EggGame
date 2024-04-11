@@ -25,12 +25,12 @@ io.on('connection', function (socket) {                     // player joining
         cursorPosY: 0,
         mouseDown: false
     };
-    console.log(players);
+    // console.log(players);                                // debug check player list
     socket.emit('currentPlayers',players);                  // send the players object to the new player
     socket.broadcast.emit('newPlayer',players[socket.id]);  // update all other players of the new player
 
     socket.on('disconnect', function() {                    // player disconnecting
-        // console.log ('a caretaker has left the room');   // debug check player list
+        console.log ('a caretaker has left the room');
         // remove the player from the players object
         delete players[socket.id];
         socket.disconnect(socket.id);
