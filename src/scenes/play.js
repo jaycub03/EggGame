@@ -9,6 +9,9 @@ class play extends Phaser.Scene {
     }
 
     create() {
+        // server stuff
+        this.socket = io();
+
         this.clickCount = 0;
         this.isTweening = false;
         this.egg = this.add.image(screenWidth/2, screenHeight/2, 'egg');

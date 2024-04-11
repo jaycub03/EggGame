@@ -1,5 +1,6 @@
 // This is main! It establishes all of the settings for the phaser canvas, 
 // like the canvas size and location in the webpage.
+//gamedevjs.com/jam/2024
 let config = {
     type: Phaser.AUTO,
     render: {
