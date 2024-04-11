@@ -10,7 +10,7 @@ class play extends Phaser.Scene {
 
     create() {
         // server and multiplayer stuff
-        var self = this;
+        const self = this;
         this.socket = io();
         this.otherPlayers = this.add.group();
         this.socket.on('currentPlayers', function (players){    // add other players to game

@@ -1,15 +1,15 @@
 // file that holds and hosts the server
 // code yoinked from:
 // https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-1/
-var express = require('express');   // express module, web framework
-var app = express();                // instance of express called app  
-var server = require('http').Server(app);       // supplied the app to the HTTP server
+// https://www.youtube.com/watch?v=CCKsqfBrJhg&list=PLo6lBZn6hgcZ4-xQFjDPfWnONyq9vFnh9&index=7
+const express = require('express');           // express module, web framework
+const app = express();                        // instance of express called app 
+const PORT = process.env.PORT || 8081
+app.use(express.static(__dirname));             // render static files using express.static
+const server = require('http').Server(app);   // supplied the app to the HTTP server
 
-var io = require('socket.io')(server);  // listen to server
-var players = {};                       // players object
-
-
-app.use(express.static(__dirname));  // render static files using express.static
+const io = require('socket.io')(server);      // listen to server
+const players = {};                           // players object
 
 app.get('/', function (req, res) {              // tells the server to serve the index.html file as the root page
     res.sendFile(__dirname + '/index.html');
@@ -44,6 +44,6 @@ io.on('connection', function (socket) {                     // player joining
     
 });
 
-server.listen(8081, function () {               // server starts listening on port 8081
-    console.log(`Listening on $(server.address().port)`);
+server.listen(PORT, function () {               // server starts listening on PORT
+    console.log(`Listening on ${server.address().port}`);
 })
