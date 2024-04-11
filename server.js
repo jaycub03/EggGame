@@ -35,6 +35,13 @@ io.on('connection', function (socket) {                     // player joining
         delete players[socket.id];
         socket.disconnect(socket.id);
     });
+
+    socket.on('playerMovement', function (positionData) {   // if a player moved, update the server
+        players[socket.id].x = positionData.x;
+        players[socket.id].y = positionData.y;
+        socket.broadcast.emit('playerMoved', players[socket.id]);
+    });
+    
 });
 
 server.listen(8081, function () {               // server starts listening on port 8081
