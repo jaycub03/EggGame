@@ -1,4 +1,3 @@
-// Class copied from professor Altice's PaddleParkourP3
 class load extends Phaser.Scene {
     constructor() {
         super('loadScene');
