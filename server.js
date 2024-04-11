@@ -21,7 +21,8 @@ io.on('connection', function (socket) {                     // player joining
     // create a new player and add it to the players object
     players[socket.id] = {
         playerID: socket.id,
-        cursorLocation: 0,
+        cursorPosX: 0,
+        cursorPosY: 0,
         mouseDown: false
     };
     console.log(players);

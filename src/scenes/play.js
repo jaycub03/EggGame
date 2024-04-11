@@ -9,8 +9,16 @@ class play extends Phaser.Scene {
     }
 
     create() {
-        // server stuff
+        // server and multiplayer stuff
+        var self = this;
         this.socket = io();
+        this.socket.on('currentPlayers', function (players){
+            Object.keys(players).forEach(function (id) {
+                if (players[id].playerID == self.socket.id) {
+                    addPlayer(self, players[id]);
+                }
+            });
+        });
 
         this.clickCount = 0;
         this.isTweening = false;
@@ -48,6 +56,10 @@ class play extends Phaser.Scene {
          
          }, this.egg)
         
-        
+         // puts the player into the game as a sprite/object
+         function addPlayer(self, playerInfo){
+            self.cursor = self.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
+        }
+
     }
 }
