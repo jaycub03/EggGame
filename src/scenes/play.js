@@ -13,7 +13,10 @@ class play extends Phaser.Scene {
         this.isTweening = false;
         this.egg = this.add.image(screenWidth/2, screenHeight/2, 'egg');
         this.egg.setInteractive()
-        this.counterTxt = this.add.text(20,20, clickCount)
+        this.counterTxt = this.add.text(20, 20, this.clickCount, {
+            font: '18px Arial',
+            fill: '#ffffff'
+        })
         // https://github.com/phaserjs/examples/blob/master/public/src/game%20objects/shapes/rectangle.js
         // https://phaser.discourse.group/t/how-to-tween-sprite-in-phaser-3/4526
 
@@ -24,6 +27,7 @@ class play extends Phaser.Scene {
         this.egg.on('pointerdown', ()=> {
             // When the egg is clicked it should play the egg bounce animation, inspired by cookie clicker
             this.clickCount++;
+            this.counterTxt.setText(' ' + this.clickCount)
             console.log(this.clickCount);
             
             if ( !this.isTweening ){
@@ -42,9 +46,13 @@ class play extends Phaser.Scene {
         
                 })
             }
+
+            if(this.clickCount >= 10) {
+                console.log  ("going endscreen")
+                this.scene.start('endscreen')
+            }
          
-         }, this.egg)
-        
+         }, this)
         
     }
 }

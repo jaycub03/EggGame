@@ -16,7 +16,7 @@ let config = {
 
     backgroundColor: '#4488aa',
     zoom: 2,
-    scene: [ load, mainmenu, play, endscreen ]
+    scene: [ load, mainmenu, play, endscreen]
 }
 
 let hatchHours = 10
