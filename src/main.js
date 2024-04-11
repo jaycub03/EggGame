@@ -13,6 +13,8 @@ let config = {
             debug: true
         }
     },
+
+    backgroundColor: '#4488aa',
     zoom: 2,
     scene: [ load, mainmenu, play, endscreen ]
 }
