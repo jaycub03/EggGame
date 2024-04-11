@@ -13,7 +13,7 @@ class play extends Phaser.Scene {
         this.isTweening = false;
         this.egg = this.add.image(screenWidth/2, screenHeight/2, 'egg');
         this.egg.setInteractive()
-        this.counterTxt = this.add.text(20,20, clickCount)
+        this.counterTxt = this.add.text(20,20, this.clickCount)
         // https://github.com/phaserjs/examples/blob/master/public/src/game%20objects/shapes/rectangle.js
         // https://phaser.discourse.group/t/how-to-tween-sprite-in-phaser-3/4526
 
