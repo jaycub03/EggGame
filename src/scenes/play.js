@@ -54,7 +54,7 @@ class play extends Phaser.Scene {
         this.socket.on('clickUpdate', function (clicks) {   // update client click count when the server receives a click
             self.counterTxt.setText(' ' + clicks.clickCount);
             self.clickCount++;
-            if (clicks.clickCount >= 10){
+            if (clicks.clickCount >= 10000){
                 console.log("going endscreen");
                 self.scene.start('endscreen');
             }
