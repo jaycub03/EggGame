@@ -9,7 +9,7 @@ class load extends Phaser.Scene {
     }
 
     create() {
-
+        
 
         this.scene.start('mainmenu')
     }

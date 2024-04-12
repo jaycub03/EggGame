@@ -9,6 +9,37 @@ class play extends Phaser.Scene {
     }
 
     create() {
+        // server and multiplayer stuff
+        const self = this;
+        this.socket = io();
+        this.otherPlayers = this.add.group();
+        this.socket.on('currentPlayers', function (players){    // add other players to game
+            Object.keys(players).forEach(function (id) {
+                if (players[id].playerID == self.socket.id) {
+                    addPlayer(self, players[id]);
+                } else {
+                    addOtherPlayers(self, players[id]);
+                }
+            });
+        });
+        this.socket.on('newPlayer', function (playerInfo){
+            addOtherPlayers(self, playerInfo);
+        });
+        this.socket.on('disconnect', function (playerID){       // remove other players from game
+            if (playerID == otherPlayer,playerID) {
+                otherPlayer.destroy();
+            }
+        });
+        this.socket.on('playerMoved', function (playerInfo) {   // when other players move, update the client
+            self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+                if (playerInfo.playerID == otherPlayer.playerID) {
+                    otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+                }
+            });
+        });
+
+
+
         this.clickCount = 0;
         this.isTweening = false;
         this.egg = this.add.image(screenWidth/2, screenHeight/2, 'egg');
@@ -52,7 +83,48 @@ class play extends Phaser.Scene {
                 this.scene.start('endscreen')
             }
          
+<<<<<<< HEAD
          }, this)
         
+=======
+         }, this.egg)
+        
+         // puts the player into the game as a sprite/object
+         function addPlayer(self, playerInfo){
+            self.cursor = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
+        }
+
+        // puts other players into the game as a sprite/object
+        function addOtherPlayers(self, playerInfo) {
+            const otherPlayer = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
+            otherPlayer.playerID = playerInfo.playerID;
+            self.otherPlayers.add(otherPlayer);
+        }
+
+    }
+
+    update() {
+        if (this.cursor) {
+            // move cursor
+            this.cursor.x = this.input.activePointer.x;
+            this.cursor.y = this.input.activePointer.y;
+
+            // emit cursor movement
+            var x = this.cursor.x;
+            var y = this.cursor.y;
+            if (this.cursor.oldPosition && (x!= this.cursor.oldPosition.x || y!= this.cursor.oldPosition.y)) {
+                this.socket.emit('playerMovement', {
+                    x: this.cursor.x,
+                    y: this.cursor.y
+                });
+            }
+
+            // old position data
+            this.cursor.oldPosition = {
+                x: this.cursor.x,
+                y: this.cursor.y
+            };
+        }
+>>>>>>> feature/multiplayerClicker
     }
 }
