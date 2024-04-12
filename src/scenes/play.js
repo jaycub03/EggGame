@@ -50,6 +50,15 @@ class play extends Phaser.Scene {
             font: '18px Arial',
             fill: '#ffffff'
         })
+
+        this.socket.on('clickUpdate', function (clicks) {   // update client click count when the server receives a click
+            self.counterTxt.setText(' ' + clicks.clickCount);
+            self.clickCount++;
+            if (clicks.clickCount >= 10){
+                console.log("going endscreen");
+                self.scene.start('endscreen');
+            }
+        });
         // https://github.com/phaserjs/examples/blob/master/public/src/game%20objects/shapes/rectangle.js
         // https://phaser.discourse.group/t/how-to-tween-sprite-in-phaser-3/4526
 
@@ -59,10 +68,14 @@ class play extends Phaser.Scene {
         
         this.egg.on('pointerdown', ()=> {
             // When the egg is clicked it should play the egg bounce animation, inspired by cookie clicker
-            this.clickCount++;
-            this.counterTxt.setText(' ' + this.clickCount)
+            // this.clickCount++;
+            // this.counterTxt.setText(' ' + this.clickCount)
             console.log(this.clickCount);
-            
+            // when a player clicks, send to the server
+            this.socket.emit('playerClick', {
+                clickCount: this.clickCount
+            })
+
             if ( !this.isTweening ){
                 this.isTweening = true
                 this.tweens.add({
@@ -80,10 +93,10 @@ class play extends Phaser.Scene {
                 })
             }
 
-            if(this.clickCount >= 10) {
-                console.log  ("going endscreen")
-                this.scene.start('endscreen')
-            }
+            // if(this.clickCount >= 10) {
+            //     console.log  ("going endscreen")
+            //     this.scene.start('endscreen')
+            // }
          
          }, this.egg)
         

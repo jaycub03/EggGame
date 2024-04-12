@@ -13,6 +13,9 @@ const io = new Server(server);
 app.use(express.static(__dirname));           // render static files using express.static
 
 const players = {};                           // players object
+const clicks = {
+    clickCount: 0
+}
 
 app.get('/', function (req, res) {              // tells the server to serve the index.html file as the root page
     res.sendFile(__dirname + '/index.html');
@@ -29,8 +32,9 @@ io.on('connection', function (socket) {                     // player joining
         mouseDown: false
     };
     // console.log(players);                                // debug check player list
-    socket.emit('currentPlayers',players);                  // send the players object to the new player
-    socket.broadcast.emit('newPlayer',players[socket.id]);  // update all other players of the new player
+    socket.emit('currentPlayers', players);                  // send the players object to the new player
+    socket.emit('clickUpdate', clicks);                     // send the clicks object to the new player
+    socket.broadcast.emit('newPlayer', players[socket.id]);  // update all other players of the new player
 
     socket.on('disconnect', function() {                    // player disconnecting
         console.log ('a caretaker has left the room');
@@ -44,6 +48,11 @@ io.on('connection', function (socket) {                     // player joining
         players[socket.id].x = positionData.x;
         players[socket.id].y = positionData.y;
         socket.broadcast.emit('playerMoved', players[socket.id]);
+    });
+
+    socket.on('playerClick', function () {
+        clicks.clickCount++;
+        io.emit('clickUpdate', clicks);
     });
     
 });
