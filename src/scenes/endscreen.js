@@ -14,9 +14,9 @@ class endscreen extends Phaser.Scene {
         //dragon in middle of screen
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'dragon');
 
-        //display egg has hatched   
+        //display egg has hatched text
         this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 100, 'THE EGG HAS HATCHED', {
-            font: '32px Arial',
+            font: '32px Times New Roman',
             fill: '#ffffff'
         }).setOrigin(0.5,0.5)
         //restart text for R to restart

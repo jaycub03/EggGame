@@ -4,13 +4,6 @@ class play extends Phaser.Scene {
         super('play');
     }
 
-    preload() {
-        //credit:https://pixabay.com/music/beats-tvari-tokyo-cafe-159065/
-        //loads lofi audio
-        this.load.audio('lofi', 'assets/lofi.mp3')
-        
-    }
-
     create() {
         this.sound.play('lofi', {
             loop:true
