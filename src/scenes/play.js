@@ -5,10 +5,16 @@ class play extends Phaser.Scene {
     }
 
     preload() {
+        //credit:https://pixabay.com/music/beats-tvari-tokyo-cafe-159065/
+        //loads lofi audio
+        this.load.audio('lofi', 'assets/lofi.mp3')
         
     }
 
     create() {
+        this.sound.play('lofi', {
+            loop:true
+        })
         this.clickCount = 0;
         this.isTweening = false;
         this.egg = this.add.image(screenWidth/2, screenHeight/2, 'egg');
@@ -49,6 +55,9 @@ class play extends Phaser.Scene {
 
             if(this.clickCount >= 10) {
                 console.log  ("going endscreen")
+                //stops the track so it doesnt play the next screen
+                this.sound.stopByKey('lofi')
+                //starts endscreen
                 this.scene.start('endscreen')
             }
          
