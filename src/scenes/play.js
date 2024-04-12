@@ -11,7 +11,7 @@ class play extends Phaser.Scene {
     create() {
         // server and multiplayer stuff
         const self = this;
-        this.socket = io();
+        this.socket = io('http://169.233.246.179:8081/');
         this.otherPlayers = this.add.group();
         this.socket.on('currentPlayers', function (players){    // add other players to game
             Object.keys(players).forEach(function (id) {
@@ -25,10 +25,14 @@ class play extends Phaser.Scene {
         this.socket.on('newPlayer', function (playerInfo){
             addOtherPlayers(self, playerInfo);
         });
-        this.socket.on('disconnect', function (playerID){       // remove other players from game
-            if (playerID == otherPlayer,playerID) {
-                otherPlayer.destroy();
-            }
+        this.socket.on('playerDisconnect', function (playerID){       // remove other players from game
+            console.log("Test 1: someone is disconnected")
+            self.otherPlayers.getChildren().forEach( function (otherPlayer) {
+                if (playerID == otherPlayer.playerID) {
+                    otherPlayer.destroy();
+                    console.log("Test 2: other player is destroyed")
+                }
+            });
         });
         this.socket.on('playerMoved', function (playerInfo) {   // when other players move, update the client
             self.otherPlayers.getChildren().forEach(function (otherPlayer) {
@@ -38,7 +42,17 @@ class play extends Phaser.Scene {
             });
         });
 
+        // puts the player into the game as a sprite/object
+        function addPlayer(self, playerInfo){
+            self.cursor = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
+        }
 
+    // puts other players into the game as a sprite/object
+        function addOtherPlayers(self, playerInfo) {
+            const otherPlayer = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
+            otherPlayer.playerID = playerInfo.playerID;
+            self.otherPlayers.add(otherPlayer);
+        }
 
         this.clickCount = 0;
         this.isTweening = false;
@@ -79,19 +93,6 @@ class play extends Phaser.Scene {
             }
          
          }, this.egg)
-        
-         // puts the player into the game as a sprite/object
-         function addPlayer(self, playerInfo){
-            self.cursor = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
-        }
-
-        // puts other players into the game as a sprite/object
-        function addOtherPlayers(self, playerInfo) {
-            const otherPlayer = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
-            otherPlayer.playerID = playerInfo.playerID;
-            self.otherPlayers.add(otherPlayer);
-        }
-
     }
 
     update() {
