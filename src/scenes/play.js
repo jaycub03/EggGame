@@ -77,16 +77,7 @@ class play extends Phaser.Scene {
         
                 })
             }
-
-            if(this.clickCount >= 10) {
-                console.log  ("going endscreen")
-                this.scene.start('endscreen')
-            }
          
-<<<<<<< HEAD
-         }, this)
-        
-=======
          }, this.egg)
         
          // puts the player into the game as a sprite/object
@@ -125,6 +116,5 @@ class play extends Phaser.Scene {
                 y: this.cursor.y
             };
         }
->>>>>>> feature/multiplayerClicker
     }
 }
