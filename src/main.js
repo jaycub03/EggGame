@@ -38,6 +38,8 @@ let minTemp = 90
 // These are the healthy range of temps for the egg. If it is out of this range,
 let healthyMin = 97
 let healthyMax = 101
+let defaultTemp = 99
+let eggAlive = false;
 
 let hatchHours = 10
 let hatchDays = 0
