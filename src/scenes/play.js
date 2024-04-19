@@ -1,4 +1,4 @@
-const { Time } = require("phaser");
+//const { Time } = require("phaser");
 
 // Class copied from professor Altice's PaddleParkourP3
 class play extends Phaser.Scene {
@@ -42,9 +42,7 @@ class play extends Phaser.Scene {
             });
         });
 
-
-
-        let counter = 0;
+        this.counter = 0;
         eggAlive = true;
         this.temp = defaultTemp;
         this.clickCount = 0;
@@ -65,13 +63,20 @@ class play extends Phaser.Scene {
         this.counterTxt = this.add.text(screenWidth/4 + 70,20, "Click Count: " + this.clickCount).setFontSize(60).setOrigin(0)
         this.tempTxt = this.add.text(screenWidth/4 + 70,100, "Temperature: " + this.temp).setFontSize(60)
 
-        this.socket.on('clickUpdate', function (clicks) {   // update client click count when the server receives a click
-            self.counterTxt.text = ( "Click Count: " + this.clickCount);
-            self.clickCount++;
-            if (clicks.clickCount >= 10000){
+        this.socket.on('clickUpdate', function (gameVars) {   // update client click count when the server receives a click
+            self.clickCount = gameVars.clickCount;
+            self.counterTxt.text = ( "Click Count: " + self.clickCount);
+            self.temp = gameVars.temp;
+            self.tempTxt.text = ( "Temperature: " + self.temp);    
+
+            if (gameVars.clickCount >= 10000){
                 console.log("going endscreen");
                 self.scene.start('endscreen');
             }
+        });
+
+        this.socket.on('eggDeath', function (gameVars) {
+                console.log("Egg is dead");
         });
         // https://github.com/phaserjs/examples/blob/master/public/src/game%20objects/shapes/rectangle.js
         // https://phaser.discourse.group/t/how-to-tween-sprite-in-phaser-3/4526
@@ -82,11 +87,12 @@ class play extends Phaser.Scene {
         
         this.egg.on('pointerdown', ()=> {
             // When the egg is clicked it should play the egg bounce animation, inspired by cookie clicker
-            console.log(this.clickCount);
+            
             // when a player clicks, send to the server
             this.socket.emit('playerClick', {
-                clickCount: this.clickCount
+                clickCount: self.clickCount
             })
+            console.log(self.clickCount);   //debug
 
             if ( !this.isTweening ){
                 this.isTweening = true
@@ -116,14 +122,19 @@ class play extends Phaser.Scene {
 
          // When the arrows are clicked, the temp will increase or decrease
          this.hotArrow.on('pointerdown', ()=> {
-            this.temp ++;
-            this.tempTxt.text = ( "Temperature: " + this.temp);
+            // this.temp ++;
+            // this.tempTxt.text = ( "Temperature: " + this.temp);
+
+            this.socket.emit('tempUp');
+            console.log(self.temp);   //debug
          }, this.hotArrow)
 
          this.coldArrow.on('pointerdown', ()=> {
-            
-            this.temp --;
-            this.tempTxt.text = ( "Temperature: " + this.temp);
+            // this.temp --;
+            // this.tempTxt.text = ( "Temperature: " + this.temp);
+
+            this.socket.emit('tempDown');
+            console.log(self.temp);   //debug
          }, this.hotArrow)
         
          // puts the player into the game as a sprite/object
@@ -164,17 +175,21 @@ class play extends Phaser.Scene {
         }
     }
 
-    update(){
-        if ( this.temp < healthyMin || this.temp > healthyMax ) {
-            counter += delta; // increase the counter if the temp is out of range 
-        } else if ( counter !=0){
-            counter = 0
-        }
-
-        if (counter > 20000){ // If the temp has been out of the health range for 5 seconds, roll to kill the egg
-            if ( Phaser.Math.Between(1, 20) == 2){
-                eggAlive = false;
-            }
-        }
-    }
+    // update(time, delta){
+    //     // if ( this.temp < healthyMin || this.temp > healthyMax ) {
+    //     //     this.counter += delta/1000; // increase the counter if the temp is out of range by seconds
+    //     //     if (Phaser.Math.CeilTo(this.counter) % 5 == 0){ // If the temp has been out of the health range for 5 seconds, roll to kill the egg
+    //     //         if ( Phaser.Math.Between(1, 20) == 2 && rollOnceFlag){
+    //     //             eggAlive = false;
+    //     //             console.log(eggAlive);
+    //     //         }
+    //     //         this.rollOnceFlag = false;
+    //     //     } else {
+    //     //         this.rollOnceFlag = true;
+    //     //     }
+    //     //     console.log(Phaser.Math.CeilTo(this.counter));
+    //     // } else if ( this.counter !=0){
+    //     //     this.counter = 0;
+    //     // }
+    // }
 }
