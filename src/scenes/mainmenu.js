@@ -4,8 +4,15 @@ class mainmenu extends Phaser.Scene {
     }
 
     create() {
+        this.egg = this.add.image(screenWidth/2, screenHeight/2, 'egg');
+        this.egg.setInteractive()
+        this.egg.on('pointerdown', ()=> {
+            // When the egg is clicked it should play the egg bounce animation, inspired by cookie clicker
+            
+            console.log("clicked");
+            this.scene.start('play')
+        })
         
-        this.scene.start('play')
     }
 
     update(time, delta) {
