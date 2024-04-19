@@ -16,8 +16,8 @@ const players = {};                           // players object
 const gameVars = {                            // game globals
     clickCount: 0,
     temp: 99,
-    healthyMin: 97,
-    healthyMax: 101,
+    healthyMin: 98,
+    healthyMax: 100,
     dying: false,
     alive: true
 }
@@ -79,6 +79,14 @@ server.listen(PORT, function () {                           // server starts lis
     console.log(`Listening on ${server.address().port}`);
 })
 
+var tempChange = setInterval(function () {
+    var tempChangeRand = getRandomInt(-4,5);
+    gameVars.healthyMax += tempChangeRand;
+    gameVars.healthyMin += tempChangeRand;
+    tempCheck(gameVars, io);
+    io.emit('clickUpdate', gameVars);
+}, getRandomInt(10, 16)*1000);
+
 function tempCheck (gameVars, io) {
     if (gameVars.alive && gameVars.temp < gameVars.healthyMin || gameVars.temp > gameVars.healthyMax) {
         gameVars.dying = true;
@@ -98,7 +106,7 @@ function tempCheck (gameVars, io) {
                 counter--;
                 if (counter == 0){
                     console.log("rolling");
-                    if (getRandomInt(1, 3) == 2){
+                    if (getRandomInt(1, 20) == 2){
                         gameVars.alive = false;
                         io.emit('eggDeath', gameVars);
                         clearInterval(deathCountdown);

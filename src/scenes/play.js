@@ -67,7 +67,10 @@ class play extends Phaser.Scene {
             self.clickCount = gameVars.clickCount;
             self.counterTxt.text = ( "Click Count: " + self.clickCount);
             self.temp = gameVars.temp;
-            self.tempTxt.text = ( "Temperature: " + self.temp);    
+            self.tempTxt.text = ( "Temperature: " + self.temp);
+            if (gameVars.temp < gameVars.healthyMin || gameVars.temp > gameVars.healthyMax) {
+                self.tempTxt.setColor("Red");
+            } else { self.tempTxt.setColor("White"); }
 
             if (gameVars.clickCount >= 10000){
                 console.log("going endscreen");
