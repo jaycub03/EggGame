@@ -72,9 +72,12 @@ class play extends Phaser.Scene {
             self.counterTxt.text = ( "Click Count: " + self.clickCount);
             self.temp = gameVars.temp;
             self.tempTxt.text = ( "Temperature: " + self.temp);
-            if (gameVars.temp < gameVars.healthyMin || gameVars.temp > gameVars.healthyMax) {
+            if (gameVars.temp > gameVars.healthyMax) {
                 self.tempTxt.setColor("Red");
-            } else { self.tempTxt.setColor("White"); }
+            } else if (gameVars.temp < gameVars.healthyMin ) {
+                self.tempTxt.setColor("Blue");
+            } else
+                { self.tempTxt.setColor("White"); }
 
             if (gameVars.clickCount >= 10000){
                 //console.log("going endscreen");
@@ -148,19 +151,19 @@ class play extends Phaser.Scene {
         
          // puts the player into the game as a sprite/object
          function addPlayer(self, playerInfo){
-            self.cursor = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'point');
+            self.cursor = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'point').setScale(2).setOrigin(0.2,0.3);
         }
 
         // puts other players into the game as a sprite/object
         function addOtherPlayers(self, playerInfo) {
-            const otherPlayer = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'point');
+            const otherPlayer = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'point').setScale(2).setOrigin(0.2,0.3);
             otherPlayer.playerID = playerInfo.playerID;
             self.otherPlayers.add(otherPlayer);
         }
 
     }
 
-    update(time, delt) {
+    update(time, delta) {
         if (this.cursor) {
             // move cursor
             this.cursor.x = this.input.activePointer.x;
@@ -170,11 +173,18 @@ class play extends Phaser.Scene {
             var x = this.cursor.x;
             var y = this.cursor.y;
             if (this.cursor.oldPosition && (x!= this.cursor.oldPosition.x || y!= this.cursor.oldPosition.y)) {
+                console.log("movement");
                 this.socket.emit('playerMovement', {
                     x: this.cursor.x,
                     y: this.cursor.y
                 });
             }
+
+            // old position data
+            this.cursor.oldPosition = {
+                x: this.cursor.x,
+                y: this.cursor.y
+            };
         }
         if (this.dvd.x < screenWidth*3/4 + 25) {
             this.dvdSpeedx =1
