@@ -10,7 +10,12 @@ class endscreen extends Phaser.Scene {
 
     create() {
 
+        if (eggAlive){
+            this.add.image (screenWidth/2, screenHeight/2, 'win')
+        } else {
+            this.add.image (screenWidth/2, screenHeight/2, 'loss')
 
-        this.scene.start('mainmenu')
+        }
+
     }
 }

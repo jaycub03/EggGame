@@ -1,4 +1,4 @@
-const { Time } = require("phaser");
+// const { Time } = require("phaser");
 
 // Class copied from professor Altice's PaddleParkourP3
 class play extends Phaser.Scene {
@@ -11,7 +11,15 @@ class play extends Phaser.Scene {
     }
 
     create() {
-        let counter = 0;
+        this.sky = this.add.image( screenWidth/2 + 150, screenHeight/2 - 300, 'sky').setScale(2);
+        this.city = this.add.image(screenWidth/2 + 10,screenHeight/2 - 80, 'city').setScale(1.7)
+        
+        this.dvdSpeedx = 1;
+        this.dvdSpeedy = 1;
+        this.dvd = this.add.image(screenWidth*3/4 + 300 , screenHeight/2 , 'dvd').setScale(1/2);
+
+        this.cameras.main.setBackgroundColor(0x000);
+        this.counter = 0;
         eggAlive = true;
         this.temp = defaultTemp;
         this.clickCount = 0;
@@ -26,7 +34,7 @@ class play extends Phaser.Scene {
         this.hotArrow.setInteractive()
         
         // The egg
-        this.egg = this.add.image(screenWidth/10 + 50, screenHeight*3/4 - 150, 'egg').setScale(15);
+        this.egg = this.add.image(screenWidth/10 + 50, screenHeight*3/4 - 150, 'egg').setScale(.75);
         this.egg.setInteractive()
 
         // The text in the top left
@@ -40,6 +48,8 @@ class play extends Phaser.Scene {
         //  on click reference
         // https://stackoverflow.com/questions/63667506/how-to-detect-click-on-the-images-in-phaser3
         
+        
+
         this.egg.on('pointerdown', ()=> {
             // When the egg is clicked it should play the egg bounce animation, inspired by cookie clicker
             this.clickCount++;
@@ -51,10 +61,10 @@ class play extends Phaser.Scene {
                 this.isTweening = true
                 this.tweens.add({
                     targets: this.egg,
-                    scaleX: 16,
-                    scaleY: 16 ,
+                    scaleX: .9,
+                    scaleY: .9 ,
                     yoyo: true,
-                    duration: 100,
+                    duration: 150,
                     ease: 'Sine.easeInOut',
                     onComplete:  ()=> {
                         // Reset the flag to false when the tween completes
@@ -83,14 +93,30 @@ class play extends Phaser.Scene {
         
     }
 
-    update(){
+    update(time, delta){
+
+        if (this.dvd.x < screenWidth*3/4 + 25) {
+            this.dvdSpeedx =1
+        } else if ( this.dvd.x > screenWidth - 30){
+            this.dvdSpeedx = -1
+        }
+        this.dvd.setX (this.dvd.x + this.dvdSpeedx)
+
+        if (this.dvd.y > screenHeight/2 + 300) {
+            this.dvdSpeedy =-1
+        } else if ( this.dvd.y <screenHeight/2 - 160){
+            this.dvdSpeedy = 1
+        }
+        this.dvd.setY (this.dvd.y + this.dvdSpeedy)
+
+        
         if ( this.temp < healthyMin || this.temp > healthyMax ) {
-            counter += delta; // increase the counter if the temp is out of range 
-        } else if ( counter !=0){
-            counter = 0
+            this.counter += time.delta; // increase the counter if the temp is out of range 
+        } else if ( this.counter !=0){
+            this.counter = 0
         }
 
-        if (counter > 20000){ // If the temp has been out of the health range for 5 seconds, roll to kill the egg
+        if (this.counter > 20000){ // If the temp has been out of the health range for 5 seconds, roll to kill the egg
             if ( Phaser.Math.Between(1, 20) == 2){
                 eggAlive = false;
             }
