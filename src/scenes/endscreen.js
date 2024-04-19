@@ -10,6 +10,10 @@ class endscreen extends Phaser.Scene {
 
     }
 
+    init(data) {
+        this.alive = data.alive;
+    }
+
     create() {
         //dragon in middle of screen
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'dragon');
@@ -30,5 +34,12 @@ class endscreen extends Phaser.Scene {
         this.restartKey.on('down', function() {
             this.scene.start('mainmenu')
         }, this)
+        if (this.alive){
+            this.add.image (screenWidth/2, screenHeight/2, 'win')
+        } else {
+            this.add.image (screenWidth/2, screenHeight/2, 'loss').setScale(.85)
+
+        }
+
     }
 }
