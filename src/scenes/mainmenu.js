@@ -9,7 +9,7 @@ class mainmenu extends Phaser.Scene {
         this.egg.on('pointerdown', ()=> {
             // When the egg is clicked it should play the egg bounce animation, inspired by cookie clicker
             
-            console.log("clicked");
+            //console.log("clicked");
             this.scene.start('play')
         })
         

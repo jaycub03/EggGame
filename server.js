@@ -106,7 +106,7 @@ function tempCheck (gameVars, io) {
                 counter--;
                 if (counter == 0){
                     console.log("rolling");
-                    if (getRandomInt(1, 20) == 2){
+                    if (getRandomInt(1, 11) == 2){
                         gameVars.alive = false;
                         io.emit('eggDeath', gameVars);
                         clearInterval(deathCountdown);

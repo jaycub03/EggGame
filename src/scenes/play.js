@@ -81,13 +81,13 @@ class play extends Phaser.Scene {
             } else { self.tempTxt.setColor("White"); }
 
             if (gameVars.clickCount >= 10000){
-                console.log("going endscreen");
-                self.scene.start('endscreen');
+                //console.log("going endscreen");
+                self.scene.start('endscreen', {alive: gameVars.alive});
             }
         });
 
         this.socket.on('eggDeath', function (gameVars) {
-                console.log("Egg is dead");
+                //console.log("Egg is dead");
         });
         // https://github.com/phaserjs/examples/blob/master/public/src/game%20objects/shapes/rectangle.js
         // https://phaser.discourse.group/t/how-to-tween-sprite-in-phaser-3/4526
@@ -105,7 +105,7 @@ class play extends Phaser.Scene {
             this.socket.emit('playerClick', {
                 clickCount: self.clickCount
             })
-            console.log(self.clickCount);   //debug
+            //console.log(self.clickCount);   //debug
 
             if ( !this.isTweening ){
                 this.isTweening = true
@@ -139,7 +139,7 @@ class play extends Phaser.Scene {
             // this.tempTxt.text = ( "Temperature: " + this.temp);
 
             this.socket.emit('tempUp');
-            console.log(self.temp);   //debug
+            //console.log(self.temp);   //debug
          }, this.hotArrow)
 
          this.coldArrow.on('pointerdown', ()=> {
@@ -147,24 +147,24 @@ class play extends Phaser.Scene {
             // this.tempTxt.text = ( "Temperature: " + this.temp);
 
             this.socket.emit('tempDown');
-            console.log(self.temp);   //debug
+            //console.log(self.temp);   //debug
          }, this.hotArrow)
         
          // puts the player into the game as a sprite/object
          function addPlayer(self, playerInfo){
-            self.cursor = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
+            self.cursor = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'point');
         }
 
         // puts other players into the game as a sprite/object
         function addOtherPlayers(self, playerInfo) {
-            const otherPlayer = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'egg');
+            const otherPlayer = self.physics.add.image(playerInfo.cursorPosX, playerInfo.cursorPosY, 'point');
             otherPlayer.playerID = playerInfo.playerID;
             self.otherPlayers.add(otherPlayer);
         }
 
     }
 
-    update() {
+    update(time, delt) {
         if (this.cursor) {
             // move cursor
             this.cursor.x = this.input.activePointer.x;
@@ -178,11 +178,8 @@ class play extends Phaser.Scene {
                     x: this.cursor.x,
                     y: this.cursor.y
                 });
-        
-    }
-
-    update(time, delta){
-
+            }
+        }
         if (this.dvd.x < screenWidth*3/4 + 25) {
             this.dvdSpeedx =1
         } else if ( this.dvd.x > screenWidth - 30){
@@ -196,15 +193,10 @@ class play extends Phaser.Scene {
             this.dvdSpeedy = 1
         }
         this.dvd.setY (this.dvd.y + this.dvdSpeedy)
-            }
-
-            // old position data
-            this.cursor.oldPosition = {
-                x: this.cursor.x,
-                y: this.cursor.y
-            };
-        }
+        
     }
+
+
 
     // update(time, delta){
     //     // if ( this.temp < healthyMin || this.temp > healthyMax ) {

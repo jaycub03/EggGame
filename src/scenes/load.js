@@ -13,6 +13,7 @@ class load extends Phaser.Scene {
         this.load.image('sky','assets/sky.png')
         this.load.image('city','assets/city.png')
         this.load.image('loss','assets/loss.jpg')
+        this.load.image('point','assets/point.png')
         //this.load.image('win','assets/win.png')
 
     }
