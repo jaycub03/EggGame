@@ -30,5 +30,12 @@ class endscreen extends Phaser.Scene {
         this.restartKey.on('down', function() {
             this.scene.start('mainmenu')
         }, this)
+        if (gameVars.alive){
+            this.add.image (screenWidth/2, screenHeight/2, 'win')
+        } else {
+            this.add.image (screenWidth/2, screenHeight/2, 'loss').setScale(.85)
+
+        }
+
     }
 }

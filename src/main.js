@@ -40,7 +40,7 @@ let minTemp = 90
 let healthyMin = 97
 let healthyMax = 101
 let defaultTemp = 99
-let eggAlive = false;
+let eggAlive = true;
 
 let hatchHours = 10
 let hatchDays = 0

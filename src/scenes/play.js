@@ -42,6 +42,14 @@ class play extends Phaser.Scene {
             });
         });
 
+        this.sky = this.add.image( screenWidth/2 + 150, screenHeight/2 - 300, 'sky').setScale(2);
+        this.city = this.add.image(screenWidth/2 + 10,screenHeight/2 - 80, 'city').setScale(1.7)
+        
+        this.dvdSpeedx = 1;
+        this.dvdSpeedy = 1;
+        this.dvd = this.add.image(screenWidth*3/4 + 300 , screenHeight/2 , 'dvd').setScale(1/2);
+
+        this.cameras.main.setBackgroundColor(0x000);
         this.counter = 0;
         eggAlive = true;
         this.temp = defaultTemp;
@@ -57,7 +65,7 @@ class play extends Phaser.Scene {
         this.hotArrow.setInteractive()
         
         // The egg
-        this.egg = this.add.image(screenWidth/10 + 50, screenHeight*3/4 - 150, 'egg').setScale(15);
+        this.egg = this.add.image(screenWidth/10 + 50, screenHeight*3/4 - 150, 'egg').setScale(.75);
         this.egg.setInteractive()
         // The text in the top left
         this.counterTxt = this.add.text(screenWidth/4 + 70,20, "Click Count: " + this.clickCount).setFontSize(60).setOrigin(0)
@@ -88,6 +96,8 @@ class play extends Phaser.Scene {
         //  on click reference
         // https://stackoverflow.com/questions/63667506/how-to-detect-click-on-the-images-in-phaser3
         
+        
+
         this.egg.on('pointerdown', ()=> {
             // When the egg is clicked it should play the egg bounce animation, inspired by cookie clicker
             
@@ -101,10 +111,10 @@ class play extends Phaser.Scene {
                 this.isTweening = true
                 this.tweens.add({
                     targets: this.egg,
-                    scaleX: 16,
-                    scaleY: 16 ,
+                    scaleX: .9,
+                    scaleY: .9 ,
                     yoyo: true,
-                    duration: 100,
+                    duration: 150,
                     ease: 'Sine.easeInOut',
                     onComplete:  ()=> {
                         // Reset the flag to false when the tween completes
@@ -168,6 +178,24 @@ class play extends Phaser.Scene {
                     x: this.cursor.x,
                     y: this.cursor.y
                 });
+        
+    }
+
+    update(time, delta){
+
+        if (this.dvd.x < screenWidth*3/4 + 25) {
+            this.dvdSpeedx =1
+        } else if ( this.dvd.x > screenWidth - 30){
+            this.dvdSpeedx = -1
+        }
+        this.dvd.setX (this.dvd.x + this.dvdSpeedx)
+
+        if (this.dvd.y > screenHeight/2 + 300) {
+            this.dvdSpeedy =-1
+        } else if ( this.dvd.y <screenHeight/2 - 160){
+            this.dvdSpeedy = 1
+        }
+        this.dvd.setY (this.dvd.y + this.dvdSpeedy)
             }
 
             // old position data
