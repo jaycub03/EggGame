@@ -16,7 +16,9 @@ class endscreen extends Phaser.Scene {
 
     create() {
         //dragon in middle of screen
-        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'dragon');
+        const win = "win" + Phaser.Math.Between(1,3);
+        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, win);
+        console.log(win);
 
         //display egg has hatched text
         this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 100, 'THE EGG HAS HATCHED', {
@@ -35,7 +37,7 @@ class endscreen extends Phaser.Scene {
             this.scene.start('mainmenu')
         }, this)
         if (this.alive){
-            this.add.image (screenWidth/2, screenHeight/2, 'win')
+            //this.add.image (screenWidth/2, screenHeight/2, 'win')
         } else {
             this.add.image (screenWidth/2, screenHeight/2, 'loss').setScale(.85)
 
